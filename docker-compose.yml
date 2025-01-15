@@ -1,19 +1,19 @@
 services:
-  super-app-nestjs:
-    build: .
-    container_name: nest-js-super-app
-    ports:
-      - '5000:3000'
-    env_file:
-      - .env
-    depends_on:
-      - super-db-nestjs
-    networks:
-      - super-net
-    volumes:
-      - .:/usr/src/app 
-      - /usr/src/app/node_modules
-    command: npm run start:dev
+  # super-app-nestjs:
+  #   build: .
+  #   container_name: nest-js-super-app
+  #   ports:
+  #     - '5000:3000'
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - super-db-nestjs
+  #   networks:
+  #     - super-net
+  #   volumes:
+  #     - .:/usr/src/app 
+  #     - /usr/src/app/node_modules
+  #   command: npm run start:dev
   super-db-nestjs:
     image: postgres
     container_name: nest-js-super-db
