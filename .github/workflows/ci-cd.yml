@@ -1,53 +1,53 @@
-# name: Node.js CD
+name: Node.js CD
 
-# on:
-#   push:
-#     branches: ['main']
-#   pull_request:
-#     branches: ['main']
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     strategy:
-#       matrix:
-#         node-version: [18.x, 20.x, 22.x]
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
 
-#     steps:
-#       - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-#       - name: Use Node.js ${{ matrix.node-version }} - ${{ secrets.HOST }}
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }} - ${{ secrets.HOST }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-#       - run: npm install
+      - run: npm install
 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-#       - name: Set up SSH key
-#         run: |
-#           mkdir -p ~/.ssh
-#           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa # SSH kalitni yaratish.
-#           chmod 600 ~/.ssh/id_rsa # Kalit uchun ruxsatlarni sozlash.
-#           ssh-keyscan -p 22 ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa # SSH kalitni yaratish.
+          chmod 600 ~/.ssh/id_rsa # Kalit uchun ruxsatlarni sozlash.
+          ssh-keyscan -p 22 ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
-#       - name: Deploy to server
-#         run: |
-#           ssh -v -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} <<'ENDSSH'
-#           cd ${{ secrets.APP_PATH }}
-#           git pull
-#           npm i -g pnpm 
-#           pnpm i
-#           pnpm run build
-#           docker-compose down
-#           docker-compose up
-#           pm2 restart nest-js-phone-shop
-#           ENDSSH
+      - name: Deploy to server
+        run: |
+          ssh -v -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} <<'ENDSSH'
+          cd ${{ secrets.APP_PATH }}
+          git pull
+          npm i -g pnpm 
+          pnpm i
+          pnpm run build
+          docker-compose down
+          docker-compose up
+          pm2 restart nest-js-phone-shop
+          ENDSSH
