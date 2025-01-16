@@ -42,5 +42,5 @@ volumes:
   postgres_data:
 
 networks:
-  super-net:
+  super-net-app:
     driver: bridge
