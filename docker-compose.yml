@@ -34,8 +34,6 @@ services:
     image: redis
     ports:
       - '6379:6379'
-    networks:
-      - super-net
 
 volumes:
   postgres_data:
