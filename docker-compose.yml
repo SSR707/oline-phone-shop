@@ -35,11 +35,12 @@ services:
     image: redis
     ports:
       - '6385:6379'
-    # networks:
-    #   - super-net
+    networks:
+      - super-net-app
 
 volumes:
   postgres_data:
+
 
 networks:
   super-net-app:
