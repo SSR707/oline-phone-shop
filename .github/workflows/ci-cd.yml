@@ -44,9 +44,8 @@ jobs:
           cd ${{ secrets.APP_PATH }}
           git pull
           npm i --force
-          npm i -g pnpm 
-          pnpm i
-          pnpm run build
+          npx pnpm i
+          npm run build
           npx pm2 restart nest-js-app
           ENDSSH
 
