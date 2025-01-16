@@ -1,3 +1,5 @@
+# http://65.0.76.60:5050/api/docs - Server Link
+
 ```bash
 #docker Compose ishga tushirvorish va lohha ishga tushadi 
 $ docker-compose up -d
