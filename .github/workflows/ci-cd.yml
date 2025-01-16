@@ -47,6 +47,6 @@ jobs:
           npm i -g pnpm 
           pnpm i
           pnpm run build
-          npx pm2 restart nest-js-phone-shop
+          npx pm2 restart nest-js-app
           ENDSSH
 
