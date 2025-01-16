@@ -46,8 +46,8 @@ jobs:
           npm i -g pnpm 
           pnpm i
           pnpm run build
-          docker-compose build
           docker-compose down
+          docker-compose build
           docker-compose up -d
           npx pm2 restart nest-js-phone-shop
           ENDSSH
