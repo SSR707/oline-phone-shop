@@ -20,7 +20,7 @@ import { OrderProductModule } from './order-product/order-product.module';
   imports: [
     RedisModule.forRoot({
       type: 'single',
-      url: 'redis://redis:6380',
+      url: 'redis://localhost:6379',
     }),
     ConfigModule.forRoot({
       isGlobal: true,

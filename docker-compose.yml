@@ -1,20 +1,20 @@
 services:
-  # super-app-nestjs:
-  #   build: .
-  #   container_name: oline-phone-shop
-  #   ports:
-  #     - '5050:5050'
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - super-db-nestjs
-  #     - redis
-  #   networks:
-  #     - super-net
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   command: npm run start:dev
+  oline-phone-shop:
+    build: .
+    container_name: oline-phone-shop
+    ports:
+      - '5050:5050'
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - super-net
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev
+
   # super-db-nestjs:
   #   image: postgres
   #   container_name: nest-js-super-db
@@ -30,15 +30,17 @@ services:
   #     - super-net
   #   volumes:
   #     - postgres_data:/var/lib/postgresql/data
+
   redis:
     image: redis
     ports:
       - '6380:6379'
+    networks:
+      - super-net
 
 volumes:
   postgres_data:
 
-# networks:
-#   super-net:
-#     driver: bridge
-
+networks:
+  super-net:
+    driver: bridge
