@@ -16,10 +16,12 @@ export class OrderService {
     @InjectRedis() private readonly redis: Redis,
   ) {}
   async create(createOrderDto: CreateOrderDto, id: number) {
+
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+    console.log(createOrderDto , user)
     const order = this.orderRepository.create({
       ...createOrderDto,
       user,
@@ -41,12 +43,12 @@ export class OrderService {
 
       if (search) {
         query = query
-          .where('order.status LIKE :searchh ', { search: `%${search}%` })
-          .orWhere('order.total_price::text LIKE :search');
+        .where('order.status LIKE :search', { search: `%${search}%` })
+        .orWhere('order.total_price::text LIKE :search');
       }
       query = query
-        .leftJoinAndSelect('user.orders', 'user')
-        .leftJoinAndSelect('orderProduct.order', 'orderProducts');
+      .leftJoinAndSelect('order.user', 'user')
+      .leftJoinAndSelect('order.orderProducts', 'orderProducts') 
       const order = await query.skip(offset).take(limit).getMany();
 
       await this.redis.set(redisKey, JSON.stringify(order), 'EX', 60 * 60);

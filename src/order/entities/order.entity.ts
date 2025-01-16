@@ -3,6 +3,7 @@ import { User } from 'src/auth/entities/auth.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -17,6 +18,7 @@ export class Order {
   id: number;
 
   @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ApiProperty({

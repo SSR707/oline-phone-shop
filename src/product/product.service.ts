@@ -37,7 +37,7 @@ export class ProductService {
           .orWhere('product.quantity::text LIKE :search')
           .orWhere('product.price::text LIKE :search');
       }
-      query = query.leftJoinAndSelect('orderProduct.product', 'orderProducts');
+      query = query.leftJoinAndSelect('product.orderProducts', 'orderProducts');
       const products = await query.skip(offset).take(limit).getMany();
 
       await this.redis.set(redisKey, JSON.stringify(products), 'EX', 60 * 60);

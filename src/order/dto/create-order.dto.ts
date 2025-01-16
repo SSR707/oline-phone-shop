@@ -9,7 +9,7 @@ export class CreateOrderDto {
     example: 20,
   })
   @IsDecimal()
-  price: number;
+  total_price: number;
 
   @ApiProperty({
     type: String,

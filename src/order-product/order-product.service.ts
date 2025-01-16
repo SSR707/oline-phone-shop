@@ -6,16 +6,34 @@ import { OrderProduct } from './entities/order-product.entity';
 import { Repository } from 'typeorm';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
+import { Product } from 'src/product/entities/product.entity';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class OrderProductService {
   constructor(
     @InjectRepository(OrderProduct)
     private orderProductRepository: Repository<OrderProduct>,
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+    @InjectRepository(Order) private orderRepository: Repository<Order>,
     @InjectRedis() private readonly redis: Redis,
   ) {}
-
   async create(createOrderProductDto: CreateOrderProductDto) {
+    const order = await this.orderRepository.findOne({
+      where: { id: createOrderProductDto.orderId },
+    });
+    const product = await this.productRepository.findOne({
+      where: { id: createOrderProductDto.productId },
+    });
+
+    if (!order) {
+      throw new HttpException('Order not found', HttpStatus.BAD_REQUEST);
+    }
+
+    if (!product) {
+      throw new HttpException('Product not found', HttpStatus.BAD_REQUEST);
+    }
+
     const orderProduct = this.orderProductRepository.create({
       order: { id: createOrderProductDto.orderId },
       product: { id: createOrderProductDto.productId },
@@ -35,10 +53,10 @@ export class OrderProductService {
       return JSON.parse(redisData);
     } else {
       let query =
-        this.orderProductRepository.createQueryBuilder('orderproduct');
+        this.orderProductRepository.createQueryBuilder('order_product');
       query = query
-        .leftJoinAndSelect('order.orderProducts', 'order')
-        .leftJoinAndSelect('product.orderProducts', 'product');
+        .leftJoinAndSelect('order_product.order', 'order')
+        .leftJoinAndSelect('order_product.product', 'product');
       const orderProduct = await query.skip(offset).take(limit).getMany();
 
       await this.redis.set(

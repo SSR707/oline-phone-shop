@@ -17,7 +17,7 @@ async function bootstrap() {
       },
       'access-token',
     )
-    .setDescription('The Peoject Auth API description')
+    .setDescription('The Phone Peoject Auth API description')
     .setVersion('1.0')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
