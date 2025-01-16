@@ -38,7 +38,7 @@ services:
 volumes:
   postgres_data:
 
-networks:
-  super-net:
-    driver: bridge
-    
+# networks:
+#   super-net:
+#     driver: bridge
+
