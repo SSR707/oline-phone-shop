@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { LogtailLogger } from './common/logger/logtail';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+        logger: new LogtailLogger(),
+  });
   app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .setTitle('Project')

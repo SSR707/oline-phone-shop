@@ -15,9 +15,14 @@ import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { OrderProductModule } from './order-product/order-product.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([{
+      ttl: 3000,
+      limit:4
+    }]),
     RedisModule.forRoot({
       type: 'single',
       url: 'redis://:VcaJFfHgMxBnvzYlCBxUbcldKZrqac81@redis-16383.c330.asia-south1-1.gce.redns.redis-cloud.com:16383',
@@ -70,6 +75,10 @@ import { OrderProductModule } from './order-product/order-product.module';
   ],
   controllers: [],
   providers: [
+    {
+      provide:APP_GUARD,
+      useClass:ThrottlerGuard
+    },
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
