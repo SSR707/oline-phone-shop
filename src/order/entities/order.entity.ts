@@ -12,7 +12,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderProduct } from 'src/order-product/entities/order-product.entity';
 
-@Entity()
+@Entity({name:"orders"})
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;

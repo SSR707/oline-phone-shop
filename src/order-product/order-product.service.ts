@@ -8,6 +8,8 @@ import { Redis } from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Product } from 'src/product/entities/product.entity';
 import { Order } from 'src/order/entities/order.entity';
+import { ProductService } from 'src/product/product.service';
+import { Product_enum } from 'src/common/enums/enums';
 
 @Injectable()
 export class OrderProductService {
@@ -33,7 +35,7 @@ export class OrderProductService {
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.BAD_REQUEST);
     }
-
+    await this.productRepository.update(product , {status:Product_enum.SOLD})
     const orderProduct = this.orderProductRepository.create({
       order: { id: createOrderProductDto.orderId },
       product: { id: createOrderProductDto.productId },

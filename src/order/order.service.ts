@@ -21,7 +21,6 @@ export class OrderService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log(createOrderDto , user)
     const order = this.orderRepository.create({
       ...createOrderDto,
       user,
@@ -39,16 +38,16 @@ export class OrderService {
     if (redisData) {
       return JSON.parse(redisData);
     } else {
-      let query = this.orderRepository.createQueryBuilder('order');
+      let query = this.orderRepository.createQueryBuilder('orders');
 
       if (search) {
         query = query
-        .where('order.status LIKE :search', { search: `%${search}%` })
-        .orWhere('order.total_price::text LIKE :search');
+        .where('orders.status LIKE :search', { search: `%${search}%` })
+        .orWhere('orders.total_price::text LIKE :search');
       }
       query = query
-      .leftJoinAndSelect('order.user', 'user')
-      .leftJoinAndSelect('order.orderProducts', 'orderProducts') 
+      .leftJoinAndSelect('orders.user', 'user')
+      .leftJoinAndSelect('orders.orderProducts', 'orderProducts') 
       const order = await query.skip(offset).take(limit).getMany();
 
       await this.redis.set(redisKey, JSON.stringify(order), 'EX', 60 * 60);

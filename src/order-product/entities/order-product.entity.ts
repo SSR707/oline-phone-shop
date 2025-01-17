@@ -7,8 +7,8 @@ export class OrderProduct {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Order, (order) => order.orderProducts)
-  @JoinColumn({ name: 'order_id' })
+  @ManyToOne(() => Order, (orders) => orders.orderProducts)
+  @JoinColumn({ name: 'orders_id' })
   order: Order;
 
   @ManyToOne(() => Product, (product) => product.orderProducts)

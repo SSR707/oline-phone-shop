@@ -1,6 +1,13 @@
 import { OrderProduct } from 'src/order-product/entities/order-product.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Product_enum } from 'src/common/enums/enums';
 
 @Entity()
 export class Product {
@@ -38,6 +45,14 @@ export class Product {
   })
   @Column()
   quantity: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'Product Status',
+    example: Product_enum.ACTIVE,
+  })
+  @Column({ enum: Product_enum, default: Product_enum.ACTIVE })
+  status:string
 
   @Column({ default: true })
   is_active: boolean;

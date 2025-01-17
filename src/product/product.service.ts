@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
+import { Product_enum } from 'src/common/enums/enums';
 
 @Injectable()
 export class ProductService {
@@ -31,11 +32,15 @@ export class ProductService {
 
       if (search) {
         query = query
-          .where('product.name LIKE :search OR product.info LIKE :search ', {
-            search: `%${search}%`,
-          })
-          .orWhere('product.quantity::text LIKE :search')
-          .orWhere('product.price::text LIKE :search');
+          .where(
+            '(product.name LIKE :search OR product.info LIKE :search OR product.quantity::text LIKE :search OR product.price::text LIKE :search)',
+            {
+              search: `%${search}%`,
+            },
+          )
+          .andWhere('product.status = :status', { status: 'active' });
+      } else {
+        query = query.where('product.status = :status', { status: 'active' });
       }
       query = query.leftJoinAndSelect('product.orderProducts', 'orderProducts');
       const products = await query.skip(offset).take(limit).getMany();
@@ -48,7 +53,7 @@ export class ProductService {
 
   async findOne(id: number) {
     const product = await this.productRepository.findOne({
-      where: { id },
+      where: { id, status: Product_enum.ACTIVE },
       relations: ['orderProducts'],
     });
     if (!product) {
@@ -58,7 +63,9 @@ export class ProductService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.findOne({ where: { id } });
+    const product = await this.productRepository.findOne({
+      where: { id, status: Product_enum.ACTIVE },
+    });
     if (!product) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -68,7 +75,9 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    const product = await this.productRepository.findOne({ where: { id } });
+    const product = await this.productRepository.findOne({
+      where: { id, status: Product_enum.ACTIVE },
+    });
     if (!product) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }

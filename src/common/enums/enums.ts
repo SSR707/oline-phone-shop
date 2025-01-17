@@ -8,3 +8,7 @@ export enum Status {
   COMPLETED = 'completed',
   CANCELED = 'canceled',
 }
+export enum Product_enum{
+  ACTIVE = 'active',
+  SOLD = 'sold'
+}
