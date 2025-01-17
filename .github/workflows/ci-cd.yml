@@ -43,8 +43,8 @@ jobs:
           ssh -v -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} <<'ENDSSH'
           cd ${{ secrets.APP_PATH }}
           git pull
-          docker-compose down
-          docker-compose up -d
+          npx docker-compose down
+          npx docker-compose up -d
           npm i --force
           npx pnpm i
           npm run build
