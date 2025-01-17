@@ -9,7 +9,7 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
-    .setTitle('Project')
+    .setTitle('Phone Project')
     
     .addBearerAuth(
       {
